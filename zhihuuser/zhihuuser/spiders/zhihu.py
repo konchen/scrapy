@@ -32,6 +32,7 @@ class ZhihuSpider(Spider):
         yield Request(self.followers_url.format(user=result.get('url_token'),include=self.followers_query,offset=0,limit=20),self.parse_followers)
 
     def parse_follows(self,response):  #解析所有用户关注的用户列表网页，得到用户
+        results = json.loads(response.text)
         if 'data' in results.keys():
             for result in results.get('data'):
                 yield Request(self.user_url.format(user=result.get('url_token'),include=self.user_query),self.parse_user) #回调用户解析函数，并得到该用户的关注列表
